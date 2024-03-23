@@ -107,10 +107,5 @@ If you use this code in your research, please cite the corresponding paper:
 
 Instert Citation Here
 
-## Contributors
-
-- Lajos Muzsai (muzsailajos@protonmail.com)
-- András Lukács (andras.lukacs@ttk.elte.hu)
-
 ## License 
 This project is licensed under the MIT License - see the LICENSE file for details.
