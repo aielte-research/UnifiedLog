@@ -18,6 +18,168 @@ To summarize our main contributions are as follows:
 - We confirm that instead of log parsing to represent raw log messages, it is better to use a single unified language model.
 - We suggest a new approach to evaluating log anomaly detection systems by combining performance metrics on multiple 
 
+## Benchmark performance
+In this training configuration all 17 datasets from the loghub project are utilized to train both the encoder and detector parts of the model. The first 5 million lines were used from each dataset in a 80-10-10 train/val/test split. Each row represents a unique run. This experiment set the baseline performance.
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th colspan="5">NUM Tokenization Strategy</th>
+      <th colspan="5">0-9 Tokenization Strategy</th>
+    </tr>
+    <tr>
+      <th>Embed Dim</th>
+      <th>BGL</th>
+      <th>Hadoop</th>
+      <th>HDFS</th>
+      <th>OpenStack</th>
+      <th>Thunderbird</th>
+      <th>BGL</th>
+      <th>Hadoop</th>
+      <th>HDFS</th>
+      <th>OpenStack</th>
+      <th>Thunderbird</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>16</td>
+      <td>0.945</td>
+      <td>0.994</td>
+      <td>0.430</td>
+      <td>0.210</td>
+      <td>0.999</td>
+      <td>0.999</td>
+      <td>0.205</td>
+      <td>0.053</td>
+      <td>0.887</td>
+      <td>0.999</td>
+    </tr>
+    <tr>
+      <td>32</td>
+      <td>0.945</td>
+      <td>0.993</td>
+      <td>0.470</td>
+      <td>0.211</td>
+      <td>0.999</td>
+      <td>0.995</td>
+      <td>0.123</td>
+      <td>0.087</td>
+      <td>0.810</td>
+      <td>0.999</td>
+    </tr>
+    <tr>
+      <td>64</td>
+      <td>0.999</td>
+      <td>0.996</td>
+      <td>0.643</td>
+      <td>0.211</td>
+      <td>0.999</td>
+      <td>0.999</td>
+      <td>0.845</td>
+      <td>0.560</td>
+      <td>0.733</td>
+      <td>0.999</td>
+    </tr>
+    <tr>
+      <td>128</td>
+      <td>0.999</td>
+      <td>0.996</td>
+      <td>0.921</td>
+      <td>0.211</td>
+      <td>0.999</td>
+      <td>0.999</td>
+      <td>0.842</td>
+      <td>0.633</td>
+      <td>0.725</td>
+      <td>0.999</td>
+    </tr>
+  </tbody>
+</table>
+
+
+## Performance on unseen datasets
+In this training configuration one dataset is ommitted from the training sets of both the encoder and detector. Each value represents a unique run.
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th colspan="5">NUM Tokenization Strategy</th>
+      <th colspan="5">0-9 Tokenization Strategy</th>
+    </tr>
+    <tr>
+      <th>Embed Dim</th>
+      <th>BGL</th>
+      <th>Hadoop</th>
+      <th>HDFS</th>
+      <th>OpenStack</th>
+      <th>Thunderbird</th>
+      <th>BGL</th>
+      <th>Hadoop</th>
+      <th>HDFS</th>
+      <th>OpenStack</th>
+      <th>Thunderbird</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>16</td>
+      <td>0.921</td>
+      <td>0.956</td>
+      <td>0.083</td>
+      <td>0.087</td>
+      <td>0.548</td>
+      <td>0.098</td>
+      <td>0.918</td>
+      <td>0.134</td>
+      <td>0.105</td>
+      <td>0.529</td>
+    </tr>
+    <tr>
+      <td>32</td>
+      <td>0.736</td>
+      <td>0.937</td>
+      <td>0.109</td>
+      <td>0.117</td>
+      <td>0.952</td>
+      <td>0.931</td>
+      <td>0.863</td>
+      <td>0.134</td>
+      <td>0.167</td>
+      <td>0.446</td>
+    </tr>
+    <tr>
+      <td>64</td>
+      <td>0.943</td>
+      <td>0.948</td>
+      <td>0.082</td>
+      <td>0.163</td>
+      <td>0.940</td>
+      <td>0.302</td>
+      <td>0.955</td>
+      <td>0.134</td>
+      <td>0.163</td>
+      <td>0.868</td>
+    </tr>
+    <tr>
+      <td>128</td>
+      <td>0.597</td>
+      <td>0.958</td>
+      <td>0.082</td>
+      <td>0.176</td>
+      <td>0.954</td>
+      <td>0.616</td>
+      <td>0.920</td>
+      <td>0.134</td>
+      <td>0.271</td>
+      <td>0.968</td>
+    </tr>
+  </tbody>
+</table>
+
+
 
 ## Requirements
 To replicate our results using the UnifiedLog framework, we suggest the following hardware specifications:
@@ -25,18 +187,18 @@ To replicate our results using the UnifiedLog framework, we suggest the followin
 - <b>Storage:</b> At least 200GB of available disk space
 - <b>RAM:</b> 50GB or more
 
-## Installation:
+## Installation
 ```
 conda env create -f environment.yml
 ```
 
-## Download the datasets available on Loghub with <i>loghub_downloader.py</i>.
+## Download the datasets available on Loghub
 
 ```
 python3 loghub_downloader.py -s <save-folder>
 ```
 
-## Preprocess datasets with <i>data_preprocess.py</i>.
+## Preprocess datasets
 
 ```
 python3 data_preproceess.py -d <path-to-downloaded-logs> -s <save-folder> -l <maximum-lines-per-dataset> -v <num-of-tokens> -a <ASCII-policy> -n <number-policy>
@@ -49,7 +211,7 @@ Three folders are created by this scipt:
 - <i>tokenized_for_detector<i/>
 - <i>labels<i/>.
 
-## To train and evaluate UnifiedLog run the <i>run.py</i> script.
+## Train and evaluate UnifiedLog
 
 ```
 python3 run.py -c <conf-file> -t <cpu-threads>
@@ -106,6 +268,10 @@ anomaly_detector:
 If you use this code in your research, please cite the corresponding paper:
 
 Instert Citation Here
+
+## Authors
+- Lajos Muzsai (muzsailajos@protonmail.com)
+- András Lukács (andras.lukacs@ttk.elte.hu)
 
 ## License 
 This project is licensed under the MIT License - see the LICENSE file for details.
