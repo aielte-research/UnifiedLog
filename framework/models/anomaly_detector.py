@@ -23,56 +23,11 @@ class PositionEmbedding(nn.Module):
         return x
     
     def get_angles(self, pos, i, d_model):
-        """
-        Calculate angles for positional encoding.
-
-        Parameters:
-        - pos (numpy.ndarray): Array representing the positions.
-        - i (int): Index of the angle.
-        - d_model (int): Dimensionality of the model.
-
-        Returns:
-        numpy.ndarray: Array of angles.
-
-        Example:
-        ```python
-        positions = np.arange(0, 10)
-        index = 2
-        model_dimension = 512
-        angles = get_angles(positions, index, model_dimension)
-        ```
-
-        Note:
-        This function calculates angles for positional encoding based on the position, angle index, and model dimension.
-        It uses a formula that incorporates angle rates and powers of 10, as common in positional encoding schemes.
-        """
         angle_rates = 1 / np.power(10000, (2 * (i//2)) / np.float32(d_model))
         return pos * angle_rates
     
 
     def positional_encoding(self, position, d_model):
-        """
-        Generate positional encoding for a given position and model dimension.
-
-        Parameters:
-        - position (int): Maximum position to generate encoding for.
-        - d_model (int): Dimensionality of the model.
-
-        Returns:
-        torch.Tensor: Positonal encoding tensor.
-
-        Example:
-        ```python
-        max_position = 100
-        model_dimension = 512
-        pos_encoding = positional_encoding(max_position, model_dimension)
-        ```
-
-        Note:
-        This function generates positional encoding using a combination of sine and cosine functions for a given position and model dimension.
-        It calculates angles based on the position and model dimension using the get_angles function and then applies sine to even indices and cosine to odd indices.
-        The resulting tensor is of shape (1, position, d_model) and is returned as a torch tensor with dtype torch.float32.
-        """
         angle_rads = self.get_angles(np.arange(position)[:, np.newaxis],
                                 np.arange(d_model)[np.newaxis, :],
                                 d_model)
@@ -150,30 +105,6 @@ class EarlyStopping():
         self.best_model = None
 
     def __call__(self, val_loss, model):
-        """
-        Checks whether to apply early stopping based on the validation loss.
-
-        Parameters:
-        - val_loss (float): The current validation loss.
-        - model: The PyTorch model being trained.
-
-        Returns:
-        None
-
-        Note:
-        This function compares the current validation loss with the best observed loss.
-        If the improvement is significant (greater than `min_delta`), it updates the best loss and resets the counter.
-        If the improvement is not significant, it increments the counter.
-        If the counter exceeds the tolerance, it sets the `early_stop` flag to True.
-
-        Example:
-        ```python
-        early_stopping = EarlyStopping(tolerance=3, min_delta=0.001)
-        early_stopping(val_loss, model)
-        if early_stopping.early_stop:
-            print("Training will be stopped early.")
-        ```
-        """
         if self.best_loss == None:
             self.best_loss = val_loss
             self.best_model = model
@@ -325,8 +256,7 @@ class AnomalyDetector():
                     self._Y_test[key] += _Y[key][s_index:e_index]
                     self._X_test[key] += _X[key][s_index:e_index]
                     
-                for s_index, e_index in reversed(hadoop_normal_indexes): #you need this reversed as poping an index changes the indexes after it
-                #for s_index, e_index in hadoop_normal_indexes:
+                for s_index, e_index in reversed(hadoop_normal_indexes): 
                     for idx in range(s_index,e_index, 1):
                         _Y[key].pop(idx)
                         _X[key].pop(idx)
@@ -424,8 +354,7 @@ class AnomalyDetector():
                 loss.backward()
                 optimizer.step()
 
-                if (step*batch_size) % min([1000000,len(train_loader)*batch_size]) < batch_size: # min([1000000,len(train_loader)*batch_size])
-                    #validation
+                if (step*batch_size) % min([1000000,len(train_loader)*batch_size]) < batch_size: 
                     self.model = self.model.eval()
                     with torch.no_grad():
                         accuracy = {}
@@ -576,8 +505,7 @@ class AnomalyDetector():
                     self._Y_test[key] += _Y[key][s_index:e_index]
                     self._X_test[key] += _X[key][s_index:e_index]
                     
-                for s_index, e_index in reversed(hadoop_normal_indexes): #you need this reversed as poping an index changes the indexes after it
-                #for s_index, e_index in hadoop_normal_indexes:
+                for s_index, e_index in reversed(hadoop_normal_indexes): 
                     for idx in range(s_index,e_index, 1):
                         _Y[key].pop(idx)
                         _X[key].pop(idx)
