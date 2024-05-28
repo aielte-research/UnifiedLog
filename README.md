@@ -1,5 +1,9 @@
 # UnifiedLog
 
+<p align="center">
+  <img src="logo_transparent.png" alt="logo" height="300px">
+</p>
+
 ## Project description
 Our research aimed to develop a log anomaly detector that can be used effectively immediately on new logs.
 We propose <b>UnifiedLog</b>, a log anomaly detection framework that consists of two parts: a transformer based <b>encoder</b> for a general log representation, that utilizes only the semantic information in logs and a transformer based <b>detector</b> model which is capable of anomaly detection in sequences of representations.
